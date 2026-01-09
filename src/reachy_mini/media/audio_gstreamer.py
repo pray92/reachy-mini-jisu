@@ -4,10 +4,7 @@ This module provides an implementation of the CameraBase class using GStreamer.
 By default the module directly returns JPEG images as output by the camera.
 """
 
-<<<<<<< HEAD
-=======
 import os
->>>>>>> upstream/main
 from threading import Thread
 from typing import Optional
 
@@ -18,10 +15,7 @@ from reachy_mini.media.audio_utils import (
     get_respeaker_card_number,
     has_reachymini_asoundrc,
 )
-<<<<<<< HEAD
-=======
 from reachy_mini.utils.constants import ASSETS_ROOT_PATH
->>>>>>> upstream/main
 
 try:
     import gi
@@ -232,18 +226,12 @@ class GStreamerAudio(AudioBase):
     def play_sound(self, sound_file: str) -> None:
         """Play a sound file.
 
-<<<<<<< HEAD
-=======
         Todo: for now this function is mean to be used on the wireless version.
 
->>>>>>> upstream/main
         Args:
             sound_file (str): Path to the sound file to play.
 
         """
-<<<<<<< HEAD
-        self.logger.warning("play_sound is not implemented for GStreamerAudio.")
-=======
         if not os.path.exists(sound_file):
             file_path = f"{ASSETS_ROOT_PATH}/{sound_file}"
             if not os.path.exists(file_path):
@@ -269,7 +257,6 @@ class GStreamerAudio(AudioBase):
             playbin.set_property("audio-sink", audiosink)
 
         playbin.set_state(Gst.State.PLAYING)
->>>>>>> upstream/main
 
     def clear_player(self) -> None:
         """Flush the player's appsrc to drop any queued audio immediately."""

@@ -34,10 +34,6 @@ class GstWebRTC:
         self._logger.setLevel(log_level)
 
         # self._id_audio_card = get_respeaker_card_number()
-<<<<<<< HEAD
-        self._logger.info("Writing .asoundrc to home directory in a subprocess")
-=======
->>>>>>> upstream/main
 
         Gst.init(None)
         self._loop = GLib.MainLoop()
