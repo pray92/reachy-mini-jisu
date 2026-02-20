@@ -168,26 +168,27 @@ def create(console: Console, app_name: str, app_path: Path) -> None:
 
     (base_path / module_name / "__init__.py").touch()
     (base_path / module_name / "main.py").write_text(
-        render_template("main.py.j2", context)
+        render_template("main.py.j2", context), encoding="utf-8"
     )
     (base_path / module_name / "static" / "index.html").write_text(
-        render_template("static/index.html.j2", context)
+        render_template("static/index.html.j2", context), encoding="utf-8"
     )
     (base_path / module_name / "static" / "style.css").write_text(
-        render_template("static/style.css.j2", context)
+        render_template("static/style.css.j2", context), encoding="utf-8"
     )
     (base_path / module_name / "static" / "main.js").write_text(
-        render_template("static/main.js.j2", context)
+        render_template("static/main.js.j2", context), encoding="utf-8"
     )
 
     (base_path / "pyproject.toml").write_text(
-        render_template("pyproject.toml.j2", context)
+        render_template("pyproject.toml.j2", context), encoding="utf-8"
     )
-    (base_path / "README.md").write_text(render_template("README.md.j2", context))
+    (base_path / "README.md").write_text(render_template("README.md.j2", context), encoding="utf-8")
 
-    (base_path / "index.html").write_text(render_template("index.html.j2", context))
-    (base_path / "style.css").write_text(render_template("style.css.j2", context))
-    (base_path / ".gitignore").write_text(render_template("gitignore.j2", context))
+    (base_path / "index.html").write_text(render_template("index.html.j2", context), encoding="utf-8")
+    (base_path / "style.css").write_text(render_template("style.css.j2", context), encoding="utf-8")
+    (base_path / ".gitignore").write_text(render_template("gitignore.j2", context), encoding="utf-8")
+
 
     # TODO assets dir with a .gif ?
 
@@ -354,7 +355,7 @@ def check(console: Console, app_path: str) -> None:
     console.print(f"✅ {app_name}/main.py exists.")
 
     # - <app_name>/main.py contains a class named <AppName> that inherits from ReachyMiniApp
-    with open(main_file, "r") as f:
+    with open(main_file, "r", encoding="utf-8") as f:
         main_content = f.read()
     class_name = "".join(
         word.capitalize() for word in app_name.replace("-", "_").split("_")
@@ -377,7 +378,7 @@ def check(console: Console, app_path: str) -> None:
 
     def parse_readme(file_path: str) -> Any:
         """Parse the metadata section of the README.md file."""
-        with open(file_path, "r") as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
 
         in_metadata = False
@@ -440,7 +441,8 @@ def check(console: Console, app_path: str) -> None:
     # - <app_name>/main.py exists
 
     # Now, create a temporary python venv in a temp dir, `pip install . the app, check that it works and that the entrypoint is registered
-    with tempfile.TemporaryDirectory() as tmpdir:
+    original_cwd = os.getcwd()
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmpdir:
         # change dir to tmpdir
         os.chdir(tmpdir)
 
@@ -511,6 +513,9 @@ def check(console: Console, app_path: str) -> None:
             sys.exit(1)
 
         console.print("✅ App installation and uninstallation tests passed.")
+
+        # Restore original working directory before cleanup to avoid Windows file lock
+        os.chdir(original_cwd)
 
     console.print(f"\n✅ App '{app_name}' passed all checks!", style="bold green")
 
@@ -596,7 +601,7 @@ def try_to_push(console: Console, _app_path: Path) -> bool:
     """Try to push changes to the remote repository."""
     console.print("Pushing changes to the remote repository ...", style="bold blue")
     push_result = subprocess.run(
-        f"cd {_app_path} && git push",
+        f"cd {_app_path} && git push --set-upstream space HEAD:main",
         shell=True,
         capture_output=True,
         text=True,
@@ -730,7 +735,7 @@ def publish(
 
         # commit local changes
         console.print("Committing changes locally ...", style="bold blue")
-        os.system(f"cd {app_path} && git add . && git commit -m '{commit_message}'")
+        os.system(f'cd {app_path} && git add . && git commit -m "{commit_message}"')
 
         # && git push HEAD:main"
 
@@ -764,7 +769,7 @@ def publish(
             space_sdk="static",
         )
         os.system(
-            f"cd {app_path} && git init && git remote add space {repo_url} && git add . && git commit -m 'Initial commit' && git push --set-upstream -f space HEAD:main"
+            f'cd {app_path} && git init && git remote add space {repo_url} && git add . && git commit -m "Initial commit" && git push --set-upstream -f space HEAD:main'
         )
 
         console.print("✅ App published successfully.", style="bold green")
