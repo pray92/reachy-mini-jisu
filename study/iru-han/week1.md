@@ -103,3 +103,6 @@ with ReachyMini() as mini:
 
 실행 명령어: <br/>
 python test.py
+
+<img width="1280" height="698" alt="image" src="https://github.com/user-attachments/assets/bb509e8a-1830-41c3-b33d-0ffdaee18bee" />
+
