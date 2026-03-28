@@ -123,8 +123,8 @@ https://github.com/user-attachments/assets/50dccc04-4a44-46cf-b437-c0af1e22455e
 # 2. 중력 보상
 
 ## 1. 제어 원리
-역동학(Inverse Dynamics)의 활용중력 보상 모드에서는 로봇의 질량 중심(Center of Mass)을 기반으로 각 관절에 가해지는 중력 토크(tau_g)를 실시간으로 계산합니다.
-<img width="276" height="49" alt="image" src="https://github.com/user-attachments/assets/ff061990-8897-4d71-8f04-488019c50f73" />
+역동학(Inverse Dynamics)의 활용중력 보상 모드에서는 로봇의 질량 중심(Center of Mass)을 기반으로 각 관절에 가해지는 중력 토크(tau_g)를 실시간으로 계산합니다.<br/>
+<img width="276" height="49" alt="image" src="https://github.com/user-attachments/assets/ff061990-8897-4d71-8f04-488019c50f73" /><br/>
 여기서 G(q) 항(중력)만을 모터가 보상해주기 때문에, 사용자는 로봇의 무게를 느끼지 않고 조작할 수 있습니다.<br/>
 
 ## 2. 동작 분석 (예상 결과)
