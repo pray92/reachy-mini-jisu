@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 음성 인식 (STT: Speech-To-Text) 학습
 
