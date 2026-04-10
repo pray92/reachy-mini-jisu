@@ -170,7 +170,7 @@ def demo_feedback(audio: MediaManager, synthesizer: AudioSynthesizer):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="리치 미니 스피커 출력 처리 심화 학습"
+        description="리치 미니 스피커 출력 처리 학습"
     )
     parser.add_argument(
         "--mode",

@@ -306,7 +306,7 @@ def main():
     args = parser.parse_args()
 
     print("\n" + "=" * 70)
-    print("마이크 입력 처리 심화 학습 (리치 미니)")
+    print("리치 미니 마이크 입력 처리 학습")
     print("=" * 70)
 
     # 오디오 장치 초기화
