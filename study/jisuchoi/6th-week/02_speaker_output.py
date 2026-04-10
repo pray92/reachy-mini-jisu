@@ -176,7 +176,7 @@ def main():
         "--mode",
         type=str,
         default="tone",
-        choices=["tone", "melody", "feedback", "sweep"],
+        choices=["melody", "feedback"],
         help="실행 모드",
     )
     parser.add_argument(
