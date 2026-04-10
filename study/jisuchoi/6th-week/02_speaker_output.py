@@ -21,7 +21,7 @@ import time
 import sys
 
 try:
-    from reachy_mini.media.audio_sounddevice import SoundDeviceAudio
+    from reachy_mini.media.media_manager import MediaManager, MediaBackend
 except ImportError:
     print("Error: reachy_mini 패키지가 필요합니다.")
     print("설치: pip install reachy-mini")
@@ -30,12 +30,12 @@ except ImportError:
 from audio_synthesizer import AudioSynthesizer
 
 
-def play_audio(audio: SoundDeviceAudio, waveform, sample_rate):
+def play_audio(audio: MediaManager, waveform, sample_rate):
     """
     오디오 데이터 재생
 
     Args:
-        audio: SoundDeviceAudio 인스턴스
+        audio: MediaManager 인스턴스
         waveform: numpy 배열 (1D 또는 2D)
         sample_rate: 샘플링 레이트
     """
@@ -61,7 +61,7 @@ def play_audio(audio: SoundDeviceAudio, waveform, sample_rate):
     finally:
         audio.stop_playing()
 
-def demo_melody(audio: SoundDeviceAudio, synthesizer: AudioSynthesizer):
+def demo_melody(audio: MediaManager, synthesizer: AudioSynthesizer):
     """
     멜로디 재생 (도레미파솔라시도)
     """
@@ -107,7 +107,7 @@ def demo_melody(audio: SoundDeviceAudio, synthesizer: AudioSynthesizer):
     print("✓ 완료!")
 
 
-def demo_feedback(audio: SoundDeviceAudio, synthesizer: AudioSynthesizer):
+def demo_feedback(audio: MediaManager, synthesizer: AudioSynthesizer):
     """
     상황별 피드백음 재생
     """
@@ -195,7 +195,7 @@ def main():
     # 오디오 장치 초기화
     try:
         print("\n오디오 장치 초기화 중...")
-        audio = SoundDeviceAudio()
+        audio = MediaManager(backend=MediaBackend.DEFAULT_NO_VIDEO)
         sample_rate = audio.get_output_audio_samplerate()
         channels = audio.get_output_channels()
 

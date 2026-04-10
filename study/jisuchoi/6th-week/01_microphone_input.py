@@ -24,7 +24,7 @@ import time
 import sys
 
 try:
-    from reachy_mini.media.audio_sounddevice import SoundDeviceAudio
+    from reachy_mini.media.media_manager import MediaManager, MediaBackend
 except ImportError:
     print("Error: reachy_mini 패키지가 필요합니다.")
     print("설치: pip install reachy-mini")
@@ -312,12 +312,14 @@ def main():
     # 오디오 장치 초기화
     try:
         print("\n오디오 장치 초기화 중...")
-        audio = SoundDeviceAudio()
+        audio = MediaManager(backend=MediaBackend.DEFAULT_NO_VIDEO)
         sample_rate = audio.get_input_audio_samplerate()
         channels = audio.get_input_channels()
 
         print(f"✓ 샘플링 레이트: {sample_rate} Hz")
         print(f"✓ 입력 채널: {channels}")
+        if channels == 4:
+            print("✓ ReSpeaker 마이크 배열 감지됨")
         print(f"✓ 실행 모드: {args.mode}")
         print(f"✓ 실행 시간: {args.duration}초")
 
@@ -328,10 +330,9 @@ def main():
         print(f"\n✗ 오류: 오디오 장치를 초기화할 수 없습니다.")
         print(f"상세: {e}")
         print("\n💡 해결 방법:")
-        print("1. MuJoCo 시뮬레이션이 실행 중인지 확인:")
-        print("   mjpython $(which reachy-mini-daemon) --sim --scene minimal")
-        print("2. reachy_mini 패키지 설치 확인:")
+        print("1. reachy_mini 패키지 설치 확인:")
         print("   pip install reachy-mini")
+        print("2. ReSpeaker 사용 시 드라이버 설치 필요")
         sys.exit(1)
 
     # 분석 객체 생성
