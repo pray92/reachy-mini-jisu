@@ -204,3 +204,89 @@ class AudioAnalyzer:
             - 스펙트럼 분석 (음성 대역 에너지)
         """
         return rms > threshold
+
+    def record_audio(self, duration_seconds=5, show_progress=True):
+        """
+        마이크에서 음성 녹음
+
+        Args:
+            duration_seconds: 녹음 시간 (초)
+            show_progress: 진행 상황 표시 여부
+
+        Returns:
+            tuple: (recorded_audio, sample_rate)
+                - recorded_audio: 1D numpy 배열 (float32)
+                - sample_rate: 샘플링 레이트 (Hz)
+        """
+        import time
+
+        print(f"\n녹음 시작... ({duration_seconds}초)")
+        if show_progress:
+            print("음성을 입력하세요.")
+
+        self.audio.start_recording()
+
+        try:
+            sample_rate = self.sample_rate
+            all_samples = []
+
+            samples_needed = int(sample_rate * duration_seconds)
+            start_time = time.time()
+
+            while samples_needed > 0:
+                sample = self.audio.get_audio_sample()
+                if sample is not None:
+                    # 첫 번째 채널만 사용 (모노)
+                    all_samples.append(sample[:, 0])
+                    samples_needed -= sample.shape[0]
+
+                    # 진행 상황 표시
+                    if show_progress:
+                        elapsed = time.time() - start_time
+                        progress = min(elapsed / duration_seconds * 100, 100)
+                        bar_length = 30
+                        filled = int(bar_length * progress / 100)
+                        bar = "█" * filled + "░" * (bar_length - filled)
+                        print(f"\r[{bar}] {progress:.0f}% ({elapsed:.1f}s/{duration_seconds}s)",
+                              end="", flush=True)
+
+            recorded_audio = np.concatenate(all_samples)
+
+            if show_progress:
+                print("\n✓ 녹음 완료")
+
+            return recorded_audio, sample_rate
+
+        except KeyboardInterrupt:
+            print("\n✗ 녹음 중단됨")
+            return None, None
+        finally:
+            self.audio.stop_recording()
+
+    def save_wav(self, audio_data, filename="temp_audio.wav"):
+        """
+        음성 데이터를 WAV 파일로 저장
+
+        Args:
+            audio_data: numpy 배열 (float32)
+            filename: 저장할 파일명
+
+        Returns:
+            str | None: 저장된 파일 경로, 실패 시 None
+        """
+        try:
+            import scipy.io.wavfile as wavfile
+        except ImportError:
+            print("Error: scipy 패키지가 필요합니다.")
+            print("설치 방법: pip install scipy")
+            return None
+
+        try:
+            # float32를 int16으로 변환
+            audio_int = (audio_data * 32767).astype(np.int16)
+            wavfile.write(filename, self.sample_rate, audio_int)
+            print(f"✓ 음성 파일 저장: {filename}")
+            return filename
+        except Exception as e:
+            print(f"Error: 파일 저장 실패 - {e}")
+            return None
