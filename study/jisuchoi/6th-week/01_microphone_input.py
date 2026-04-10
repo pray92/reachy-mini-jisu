@@ -214,7 +214,7 @@ def analyze_spectrum(analyzer: AudioAnalyzer, duration_seconds=5):
         analyzer.audio.stop_recording()
 
 
-def full_analysis(analyzer, threshold=0.05, duration_seconds=20):
+def full_analysis(analyzer: AudioAnalyzer, threshold=0.05, duration_seconds=20):
     """
     모든 분석을 한 번에 수행
 
